@@ -1,164 +1,75 @@
-"use client";
-import React from "react";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "./ui/input";
-import { Separator } from "./ui/separator";
-import { Button } from "./ui/button";
-import { Plus, Trash } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useMutation } from "@tanstack/react-query";
-import { useToast } from "./ui/use-toast";
-import { useRouter } from "next/navigation";
-import { createChaptersSchema } from "@/app/validators/course";
-import openai from "openai";
-import { NextApiRequest, NextApiResponse } from 'next';
+"use client"
+import React, { useState, ChangeEvent } from 'react';
+import axios from 'axios';
 
-import Replicate from "replicate";
+interface Video {
+  id: {
+    videoId: string;
+  };
+  snippet: {
+    title: string;
+    description: string;
+  };
+}
 
-type Input = z.infer<typeof createChaptersSchema>;
+const SearchComponent: React.FC = () => {
+  const [query, setQuery] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<Video[]>([]);
 
-const CreateCourseForm = () => {
-  const router = useRouter();
-  const { toast } = useToast();
-  const form = useForm<Input>({
-    resolver: zodResolver(createChaptersSchema),
-    defaultValues: {
-      title: "",
-      units: ["", "", ""],
-    },
-  });
-  const replicate = new Replicate({
-    auth: process.env.REPLICATE_API_TOKEN || "",
-  });
-  
-  async function onSubmit(data: Input) {
-        const units = form.watch("units");
-        const title= form.watch("title");
+  const handleSearch = async () => {
+    try {
+      if (!query) {
+        setSearchResults([]);
+        return;
+      }
+      const encodedQuery = encodeURIComponent(query);
+      const url = `https://www.googleapis.com/youtube/v3/search?key=AIzaSyC53W-9bpUSUL3cGAVBFpqBk_XwcKtXR80&part=snippet&q=${encodedQuery}&type=video&maxResults=15`;
 
-        const output = await replicate.run(
-          "meta/llama-2-70b-chat:02e509c789964a7ea8736978a43525956ef40397be9033abf9fd2badfe68c9e3",
-          {
-            input: {
-              debug: false,
-              top_k: 50,
-              top_p: 1,
-              prompt: `create a content for title ${title} with units : ${units} only the course headings`,
-              temperature: 0.5,
-              system_prompt: "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.",
-              max_new_tokens: 500,
-              min_new_tokens: -1
-            }
-          }
-        );
-        console.log(output);
-  }
+      const response = await axios.get(url, { timeout: 10000 });
 
-  form.watch();
+      setSearchResults(response.data.items);
+    } catch (error) {
+      console.error('Error searching YouTube:', error);
+    }
+  };
+
+  const onQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
 
   return (
-    <div className="w-full">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full mt-4">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex flex-col items-start w-full sm:items-center sm:flex-row">
-                  <FormLabel className="flex-[1] text-xl">Title</FormLabel>
-                  <FormControl className="flex-[6]">
-                    <Input
-                      placeholder="Enter the main topic of the course"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              );
-            }}
-          />
-
-          <AnimatePresence>
-            {form.watch("units").map((_, index) => {
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{
-                    opacity: { duration: 0.2 },
-                    height: { duration: 0.2 },
-                  }}
-                >
-                  <FormField
-                    key={index}
-                    control={form.control}
-                    name={`units.${index}`}
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="flex flex-col items-start w-full sm:items-center sm:flex-row">
-                          <FormLabel className="flex-[1] text-xl">
-                            Unit {index + 1}
-                          </FormLabel>
-                          <FormControl className="flex-[6]">
-                            <Input
-                              placeholder="Enter subtopic of the course"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      );
-                    }}
-                  />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-
-          <div className="flex items-center justify-center mt-4">
-            <Separator className="flex-[1]" />
-            <div className="mx-4">
-              <Button
-                type="button"
-                variant="secondary"
-                className="font-semibold"
-                onClick={() => {
-                  form.setValue("units", [...form.watch("units"), ""]);
-                }}
-              >
-                Add Unit
-                <Plus className="w-4 h-4 ml-2 text-green-500" />
-              </Button>
-
-              <Button
-                type="button"
-                variant="secondary"
-                className="font-semibold ml-2"
-                onClick={() => {
-                  form.setValue("units", form.watch("units").slice(0, -1));
-                }}
-              >
-                Remove Unit
-                <Trash className="w-4 h-4 ml-2 text-red-500" />
-              </Button>
-            </div>
-            <Separator className="flex-[1]" />
-          </div>
-          <Button
-            type="submit"
-            className="w-full mt-6"
-            size="lg"
-          >
-            Lets Go!
-          </Button>
-        </form>
-      </Form>
-      
+    <div>
+      <div className='flex justify-center mt-[10px]'>
+        <input
+          type="text"
+          value={query}
+          placeholder='Search for the content title in open source'
+          onChange={onQueryChange}
+          className='rounded-[10px] w-[400px] h-[40px]'
+        />
+        <br></br>
       </div>
+      <div className='flex justify-center mt-[10px]'>
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      <div>
+        {searchResults.map((video) => (
+          <div key={video.id.videoId} className='mx-[30px] my-[30px]'>
+            <h3 className='mx-[10px] my -[10px]'>{video.snippet.title}</h3>
+            <p className='mx-[10px] my-[10px]'>{video.snippet.description}</p>
+            <iframe
+              width="560"
+              height="315"
+              src={`https://www.youtube.com/embed/${video.id.videoId}`}
+              title={video.snippet.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
-export default CreateCourseForm;
+export default SearchComponent;
