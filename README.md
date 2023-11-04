@@ -15,6 +15,9 @@ Our project, PsychEdu-Companion, represents an innovative solution that combines
 ## Tech Stacks
 ![REVA HACK 2023 (3)](https://github.com/Naveen3251/Techinno/assets/114800360/be258183-9016-4a19-b513-f671ddea9771)
 
+### Special One
+**Mobile Friendly Web Application**
+
 ## Features:
 Tailwind design<br>
 Tailwind animations and effects<br>
@@ -26,8 +29,63 @@ Image Generation Tool (Open AI)<br>
 Conversation Generation Tool (Open AI)<br>
 Page loading state<br>
 
-## Prerequisites
+### Prerequisites
 Node version 18.x.x
 
-Cloning the repository
-git clone https://github.com/AntonioErdeljac/next13-ai-saas.git
+### Install packages
+npm i<br>
+### Setup .env file
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<br>
+CLERK_SECRET_KEY=<br>
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in<br>
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up<br>
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard<br>
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard<br>
+
+OPENAI_API_KEY=<br>
+REPLICATE_API_TOKEN=<br>
+
+PINECONE_API_KEY=<br>
+PINECONE_ENVIRONMENT=<br>
+PINECONE_INDEX=<br>
+
+UPSTASH_REDIS_REST_URL=<br>
+UPSTASH_REDIS_REST_TOKEN=<br>
+
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=<br>
+
+DATABASE_URL=<br>
+
+NEXT_PUBLIC_APP_URL="http://localhost:3000"<br>
+
+### Setup Prisma
+Add MySQL Database (I used PlanetScale)
+npx prisma db push
+
+### Seed categories:
+node scripts/seed.ts
+
+### Start the app
+npm run dev
+
+### Cloning the repository
+git clone [https://github.com/Naveen3251/Techinno.git]
+
+### Outputs
+
+### 1] Sigin/SignUp using clerk
+![Authentication](https://github.com/Naveen3251/Techinno/assets/114800360/b36e57e9-6a18-441f-a0c9-e85437a0f181)
+
+### 2] Account Management using clerk
+![Account Management](https://github.com/Naveen3251/Techinno/assets/114800360/d7bfc92c-b68f-4e74-816f-8bf57831f57c)
+
+### 3] Companions
+![HomePage](https://github.com/Naveen3251/Techinno/assets/114800360/31d1853f-7355-4258-9393-79421538fc5d)
+
+### 4] Form for creating your customized companion
+![Form](https://github.com/Naveen3251/Techinno/assets/114800360/de277418-5bc6-4231-8e11-0fa7e4256265)
+
+### 5] Chat Page
+![Chat](https://github.com/Naveen3251/Techinno/assets/114800360/368d3904-27d2-4a52-92c9-472d94c2d726)
+
