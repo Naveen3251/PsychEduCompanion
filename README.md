@@ -62,16 +62,20 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 ### Setup Prisma
 Add MySQL Database (I used PlanetScale)
-```npx prisma db push```
+```npx prisma db push
+```
 
 ### Seed categories:
-```node scripts/seed.ts```
+```node scripts/seed.ts
+```
 
 ### Start the app
-```npm run dev```
+```npm run dev
+```
 
 ### Cloning the repository
-```git clone [https://github.com/Naveen3251/Techinno.git]```
+```git clone https://github.com/Naveen3251/Techinno.git
+```
 
 ### Outputs
 
