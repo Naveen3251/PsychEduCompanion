@@ -35,42 +35,42 @@ Node version 18.x.x
 ### Install packages
 npm i<br>
 ### Setup .env file
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<br>
+```NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<br>
 CLERK_SECRET_KEY=<br>
 
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in<br>
+```NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in<br>
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up<br>
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard<br>
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard<br>
 
-OPENAI_API_KEY=<br>
+```OPENAI_API_KEY=<br>
 REPLICATE_API_TOKEN=<br>
 
-PINECONE_API_KEY=<br>
+```PINECONE_API_KEY=<br>
 PINECONE_ENVIRONMENT=<br>
 PINECONE_INDEX=<br>
 
-UPSTASH_REDIS_REST_URL=<br>
+```UPSTASH_REDIS_REST_URL=<br>
 UPSTASH_REDIS_REST_TOKEN=<br>
 
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=<br>
+```NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=<br>
 
-DATABASE_URL=<br>
+```DATABASE_URL=<br>
 
-NEXT_PUBLIC_APP_URL="http://localhost:3000"<br>
+```NEXT_PUBLIC_APP_URL="http://localhost:3000"<br>
 
 ### Setup Prisma
 Add MySQL Database (I used PlanetScale)
-npx prisma db push
+```npx prisma db push
 
 ### Seed categories:
-node scripts/seed.ts
+```node scripts/seed.ts
 
 ### Start the app
-npm run dev
+```npm run dev
 
 ### Cloning the repository
-git clone [https://github.com/Naveen3251/Techinno.git]
+```git clone [https://github.com/Naveen3251/Techinno.git]
 
 ### Outputs
 
