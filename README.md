@@ -63,7 +63,8 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ### Setup Prisma
 Add MySQL Database (I used PlanetScale)
 
-```npx prisma db push
+```
+npx prisma db push
 ```
 
 ### Seed categories:
